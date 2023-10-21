@@ -25,43 +25,13 @@ Future<void> getLocation() async {
     print(position);
   }
 }
-// void discoverBluetoothDevices() async {
-//   // Initialize the Bluetooth instance
-//   final ble = FlutterReactiveBle();
-//   final peripheralScanner = ble.p;
-//
-//   // Scan for devices
-//   final scanResult = peripheralScanner.scan(
-//     withServices: [], // Provide a list of service UUIDs to filter devices by services
-//   );
-//
-//   // Listen to scan results
-//   final subscription = scanResult.listen((scanData) {
-//     final device = scanData.peripheral.device;
-//     print('Discovered device: ${device.name}, ${device.id}');
-//
-//     // Do something with the discovered device, e.g., add it to a list
-//     // or display it in your app's user interface.
-//   });
-//
-//   // After a specific duration, stop scanning
-//   await Future.delayed(Duration(seconds: 10));
-//   await subscription.cancel();
-// }
-Future<void> getNEARBYDEVICE() async {
-var permission = await Permission.bluetoothScan.request();
 
-  if (permission == LocationPermission.denied) {
-    // Handle denied permission
-  } else if (permission == LocationPermission.whileInUse) {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    print(position);
-  }
+Future<void> getNEARBYDEVICE() async {
+  var permission = await Permission.bluetoothScan.request();
+  print("permission : ${permission.toString()}");
 }
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final _ble = FlutterReactiveBle();
@@ -79,8 +49,8 @@ void main() {
     },
     logMessage: _bleLogger.addToLog,
   );
-  getLocation();
-  getNEARBYDEVICE();
+  await getLocation();
+  await getNEARBYDEVICE();
   runApp(
     MultiProvider(
       providers: [
